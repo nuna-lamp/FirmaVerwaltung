@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 @Route
 public class MainView extends VerticalLayout {
 
+
 	private final CustomerRepository repo;
 
 	private final CustomerEditor editor;
@@ -23,6 +24,7 @@ public class MainView extends VerticalLayout {
 	final TextField filter;
 
 	private final Button addNewBtn;
+	private final Button searchBtn;
 
 	public MainView(CustomerRepository repo, CustomerEditor editor) {
 		this.repo = repo;
@@ -30,16 +32,17 @@ public class MainView extends VerticalLayout {
 		this.grid = new Grid<>(Customer.class);
 		this.filter = new TextField();
 		this.addNewBtn = new Button("New customer", VaadinIcon.PLUS.create());
+		this.searchBtn = new Button("Search Company Name", VaadinIcon.PLUS.create());
 
 		// build layout
 		HorizontalLayout actions = new HorizontalLayout(filter, addNewBtn);
 		add(actions, grid, editor);
 
 		grid.setHeight("300px");
-		grid.setColumns("id", "firstName", "lastName");
+		grid.setColumns("id","companyName","firstName","lastName","street","postCode","city","country","vaxID","webSite");
 		grid.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
 
-		filter.setPlaceholder("Filter by last name");
+		filter.setPlaceholder("Filter by company name");
 
 		// Hook logic to components
 
@@ -53,7 +56,7 @@ public class MainView extends VerticalLayout {
 		});
 
 		// Instantiate and edit new Customer the new button is clicked
-		addNewBtn.addClickListener(e -> editor.editCustomer(new Customer("", "")));
+		addNewBtn.addClickListener(e -> editor.editCustomer(new Customer("", "","","","","","","","")));
 
 		// Listen changes made by the editor, refresh data from backend
 		editor.setChangeHandler(() -> {
@@ -69,11 +72,78 @@ public class MainView extends VerticalLayout {
 	void listCustomers(String filterText) {
 		if (StringUtils.isEmpty(filterText)) {
 			grid.setItems(repo.findAll());
+		} else {
+			grid.setItems(repo.findByCompanyNameStartsWithIgnoreCase(filterText));
+		}
+	}
+}
+// end::listCustomers[]
+
+
+/*
+	private final FirmaRepository repo;
+
+	private final FirmaEditor editor;
+
+	final Grid<Firma> grid;
+
+	final TextField filter;
+
+	private final Button addNewBtn;
+
+	public MainView(FirmaRepository repo, FirmaEditor editor) {
+		this.repo = repo;
+		this.editor = editor;
+		this.grid = new Grid<>(Firma.class);
+		this.filter = new TextField();
+		this.addNewBtn = new Button("New Firma", VaadinIcon.PLUS.create());
+
+		// build layout
+		HorizontalLayout actions = new HorizontalLayout(filter, addNewBtn);
+		add(actions, grid, editor);
+
+		grid.setHeight("300px");
+		grid.setColumns("fid", "firmaName", "strasse", "");
+		grid.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
+
+		filter.setPlaceholder("Filter by last name");
+
+		// Hook logic to components
+
+		// Replace listing with filtered content when user changes filter
+		filter.setValueChangeMode(ValueChangeMode.EAGER);
+		filter.addValueChangeListener(e -> listFirma(e.getValue()));
+
+		// Connect selected Customer to editor or hide if none is selected
+		grid.asSingleSelect().addValueChangeListener(e -> {
+			editor.edit(e.getValue());
+		});
+
+		// Instantiate and edit new Customer the new button is clicked
+		addNewBtn.addClickListener(e -> editor.edit(new Firma("", "","","","","","")));
+
+		// Listen changes made by the editor, refresh data from backend
+		editor.setChangeHandler(() -> {
+			editor.setVisible(false);
+			listFirma(filter.getValue());
+		});
+
+		// Initialize listing
+		listFirma(null);
+	}
+
+
+
+    // tag::listCustomers[]
+	void listFirma(String filterText) {
+		if (StringUtils.isEmpty(filterText)) {
+			grid.setItems(repo.findAll());
 		}
 		else {
-			grid.setItems(repo.findByLastNameStartsWithIgnoreCase(filterText));
+			grid.setItems(repo.findByFirmaNameStartsWithIgnoreCase(filterText));
 		}
 	}
 	// end::listCustomers[]
-
 }
+
+*/

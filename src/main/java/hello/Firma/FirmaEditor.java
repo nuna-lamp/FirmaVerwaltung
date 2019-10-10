@@ -1,4 +1,4 @@
-package hello;
+package hello.Firma;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyNotifier;
@@ -89,7 +89,7 @@ public class FirmaEditor extends VerticalLayout implements KeyNotifier {
             // Find fresh entity for editing
             //customer = repository.findById(c.getId()).get();
 
-            firma = (Firma) repository.suchenFirmaName(f.getFirmaName().toString());
+            firma = (Firma) repository.findByFirmaNameStartsWithIgnoreCase(f.getFirmaName().toString());
         }
         else {
             firma = f;
