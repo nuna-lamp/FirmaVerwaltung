@@ -1,1 +1,7 @@
 src/main/resources/application.properties
+.idea
+node_modules
+.gradle
+.mvn
+build
+target
