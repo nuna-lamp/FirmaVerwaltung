@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import com.helger.commons.locale.country.ECountry;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.server.VaadinRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class MainViewTests {
 	@Before
 	public void setup() {
 		this.editor = new CustomerEditor(this.repository);
-		this.mainView = new MainView(this.repository, editor);
+		this.mainView = new MainView(this.repository, companyRepository, editor, companies);
 	}
 
 	@Test
@@ -57,29 +56,29 @@ public class MainViewTests {
 	public void shouldFillOutTheGridWithNewData() {
 		int initialCustomerCount = (int) this.repository.count();
 
-		customerDataWasFilled(editor, "LAMP","Nuna","Bopp", "Gotenhof1","90433","Nuernberg","Deutschland","DE123654","www.lamp.de");
+		customerDataWasFilled(editor, "Marcin", "Grzejszczak");
 
 		this.editor.save();
 
 		then(getCustomersInGrid()).hasSize(initialCustomerCount + 1);
 
 		then(getCustomersInGrid().get(getCustomersInGrid().size() - 1))
-				.extracting("companyName","firstName", "lastName","street","postCode","city","country","vaxID","webSite")
-				.containsExactly("LAMP","Nuna","Bopp", "Gotenhof1","90433","Nuernberg","Deutschland","DE123654","www.lamp.de");
+				.extracting("firstName", "lastName")
+				.containsExactly("Marcin", "Grzejszczak");
 
 	}
 
 	@Test
-	public void shouldFilterOutTheGridWithTheProvidedCompanyName() {
+	public void shouldFilterOutTheGridWithTheProvidedLastName() {
 
-		this.repository.save(new Customer("CDT","Beate","Klomm", "Peugasse9","90433","Nuernberg","Deutschland","DE45698","www.cdt.de"));
+		this.repository.save(new Customer("Josh", "Long"));
 
-		mainView.listCustomers("CDT");
+		mainView.listCustomers("Long");
 
 		then(getCustomersInGrid()).hasSize(1);
 		then(getCustomersInGrid().get(getCustomersInGrid().size() - 1))
-				.extracting("companyName","firstName", "lastName","street","postCode","city","country","vaxID","webSite")
-				.containsExactly("CDT","Beate","Klomm", "Peugasse9","90433","Nuernberg","Deutschland","DE45698","www.cdt.de");
+				.extracting("firstName", "lastName")
+				.containsExactly("Josh", "Long");
 	}
 
 	@Test
@@ -96,20 +95,11 @@ public class MainViewTests {
 		then(this.editor.isVisible()).isTrue();
 	}
 
-	private void customerDataWasFilled(CustomerEditor editor, String companyName, String firstName,
-									   String lastName,String street, String postCode, String city,
-									   String country, String vaxID, String webSite) {
-		this.editor.companyName.setValue(companyName);
+	private void customerDataWasFilled(CustomerEditor editor, String firstName,
+									   String lastName) {
 		this.editor.firstName.setValue(firstName);
 		this.editor.lastName.setValue(lastName);
-		this.editor.street.setValue(street);
-		this.editor.postCode.setValue(postCode);
-		this.editor.city.setValue(city);
-		this.editor.country.setValue(country);
-		this.editor.vaxID.setValue(vaxID);
-		this.editor.webSite.setValue(webSite);
-
-		editor.editCustomer(new Customer(companyName, firstName, lastName, street, postCode, city, country, vaxID, webSite));
+		editor.editCustomer(new Customer(firstName, lastName));
 	}
 
 	@Configuration
@@ -121,18 +111,16 @@ public class MainViewTests {
 
 		@PostConstruct
 		public void initializeData() {
-			this.repository.save(new Customer("It","Emil","Dicu", "Anbacher6","85369","Nuernberg","Deutschland","DE4526","www.it.de"));
-			this.repository.save(new Customer("Computer","David","Porter", "Englischer25","55896","Muenchen","Deutschland","DE32414","www.computer.de"));
-			this.repository.save(new Customer("Java","Aslihan","Soeke", "linder1","44256","Berlin","Deutschland","DE4569","www.java.de"));
-			this.repository.save(new Customer("EMP","Xaujau","Wen", "Nordbahnhof","12364","Nuernberg","Deutschland","DE7856","www.emp.de"));
-			this.repository.save(new Customer("LAMP","Nita","warski", "untergasse2","7895","Nuernberg","Deutschland","DE2368","www.LAMP-IT.de"));
-
+			this.repository.save(new Customer("Jack", "Bauer"));
+			this.repository.save(new Customer("Chloe", "O'Brian"));
+			this.repository.save(new Customer("Kim", "Bauer"));
+			this.repository.save(new Customer("David", "Palmer"));
+			this.repository.save(new Customer("Michelle", "Dessler"));
 		}
 	}
 }
 
-
-/*
+ /*
 @Autowired
 FirmaRepository repository;
 
@@ -141,6 +129,10 @@ FirmaRepository repository;
 	FirmaEditor editor;
 
 	MainView mainView;
+
+	public MainViewTests(FirmaRepository repo, FirmaEditor editor) {
+		super(repo, editor);
+	}
 
 	@Before
 	public void setup() {
@@ -233,4 +225,4 @@ FirmaRepository repository;
 		}
 	}
 }
-*/
+ */

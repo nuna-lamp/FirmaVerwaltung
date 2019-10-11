@@ -1,4 +1,4 @@
-package hello.Firma;
+package hello;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyNotifier;
@@ -14,19 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringComponent
 @UIScope
-public class FirmaEditor extends VerticalLayout implements KeyNotifier {
+public class CompanyEditor extends VerticalLayout implements KeyNotifier {
 
-    private final FirmaRepository repository;
-    private Firma firma;
+    private final CompanyRepository repository;
+    private Company company;
 
     /* Fields to edit properties in Firma entity */
-    TextField firmaName = new TextField("FirmaName");
-    TextField strasse = new TextField("Strasse");
-    TextField ort = new TextField("Ort");
-    TextField plz = new TextField("Plz");
-    TextField land = new TextField("Land");
-    TextField ustID = new TextField("UmsatzsteurID");
-    TextField webSite = new TextField("WebSite");
+    TextField companyName = new TextField("Company name");
+    TextField street = new TextField("Street");
+    TextField postCode = new TextField("Post code");
+    TextField city = new TextField("City");
+    TextField country = new TextField("Country");
+    TextField vaxID = new TextField("Vax ID");
+    TextField webSite = new TextField("Website");
 
     /* Action buttons */
     // TODO why more code?
@@ -35,15 +35,15 @@ public class FirmaEditor extends VerticalLayout implements KeyNotifier {
     Button delete = new Button("Delete", VaadinIcon.TRASH.create());
     HorizontalLayout actions = new HorizontalLayout(save, cancel, delete);
 
-    Binder<Firma> binder = new Binder<>(Firma.class);
+    Binder<Company> binder = new Binder<>(Company.class);
     private ChangeHandler changeHandler;
 
 
     @Autowired
-    public FirmaEditor(FirmaRepository repository) {
+    public CompanyEditor(CompanyRepository repository) {
         this.repository = repository;
 
-        add(firmaName,strasse,ort,plz,land,ustID,webSite, actions);
+        add(companyName,street,postCode,city,country,vaxID,webSite);
 
         // bind using naming convention
         binder.bindInstanceFields(this);
@@ -59,18 +59,18 @@ public class FirmaEditor extends VerticalLayout implements KeyNotifier {
         // wire action buttons to save, delete and reset
         save.addClickListener(e -> save());
         delete.addClickListener(e -> delete());
-        cancel.addClickListener(e -> edit(firma));
+        cancel.addClickListener(e -> edit(company));
         setVisible(false);
     }
 
 
     void delete() {
-        repository.delete(firma);
+        repository.delete(company);
         changeHandler.onChange();
     }
 
     void save() {
-        repository.save(firma);
+        repository.save(company);
         changeHandler.onChange();
     }
 
@@ -78,33 +78,33 @@ public class FirmaEditor extends VerticalLayout implements KeyNotifier {
         void onChange();
     }
 
-    public final void edit(Firma f) {
+    public final void edit(Company f) {
         if (f == null) {
             setVisible(false);
             return;
         }
         //final boolean persisted = f.getFirmaName()!= null;
-        final boolean persisted = f.getFid()!= 0;
+        final boolean persisted = f.getId()!= 0;
         if (persisted) {
             // Find fresh entity for editing
             //customer = repository.findById(c.getId()).get();
 
-            firma = (Firma) repository.findByFirmaNameStartsWithIgnoreCase(f.getFirmaName().toString());
+            company = (Company) repository.findByCompanyNameStartsWithIgnoreCase(f.getCompanyName().toString());
         }
         else {
-            firma = f;
+            company = f;
         }
         cancel.setVisible(persisted);
 
         // Bind Firma properties to similarly named fields
         // Could also use annotation or "manual binding" or programmatically
         // moving values from fields to entities before saving
-        binder.setBean(firma);
+        binder.setBean(company);
 
         setVisible(true);
 
-        // Focus FirmaName initially
-        firmaName.focus();
+        // Focus companyName initially
+        companyName.focus();
     }
 
     public void setChangeHandler(ChangeHandler h) {

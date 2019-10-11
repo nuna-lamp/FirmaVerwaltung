@@ -27,4 +27,19 @@ public class ApplicationTests {
 		then(this.repository.findByCompanyNameStartsWithIgnoreCase("LAMP")).hasSize(2);
 
 	}
+	/*
+	@Autowired
+	private FirmaRepository repository;
+
+	@Test
+	public void shouldFillOutComponentsWithDataWhenTheApplicationIsStarted() {
+		then(this.repository.count()).isEqualTo(5);
+	}
+
+	@Test
+	public void shouldFindTwoLampFirmen() {
+		then(this.repository.suchenFirmaName("LAMP")).hasSize(2);
+	}
+ */
+
 }

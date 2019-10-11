@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-	List<Customer> findByCompanyNameStartsWithIgnoreCase(String CompanyName);
+	List<Customer> findByLastNameStartsWithIgnoreCase(String CompanyName);
 
 
 
