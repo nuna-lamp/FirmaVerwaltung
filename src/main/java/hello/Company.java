@@ -11,7 +11,6 @@ public class Company implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "ID")
 	private long id;
 	@Column(name = "Company_Name")
 	private String companyName;
@@ -28,9 +27,12 @@ public class Company implements Serializable {
 	@Column (name = "Website")
 	private String webSite;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = hello.Customer.class)
+	@OneToMany(
+			cascade = CascadeType.ALL,
+			orphanRemoval = true
+	)
 	@JoinColumn(name = "company_id")
-	private List<Customer> customers;
+	private List<Customer> customers = new ArrayList<>();
 
 	protected Company() {
 	}
@@ -40,7 +42,6 @@ public class Company implements Serializable {
 	}
 
 	public Company(String companyName, String street, String postCode, String city, String country, String vaxID, String webSite) {
-		this.id = id;
 		this.companyName = companyName;
 		this.street = street;
 		this.postCode = postCode;
@@ -115,9 +116,6 @@ public class Company implements Serializable {
 	}
 
 	public List<Customer> getCustomers() {
-		if(null == customers){
-			return new ArrayList<>();
-		}
 		return customers;
 	}
 

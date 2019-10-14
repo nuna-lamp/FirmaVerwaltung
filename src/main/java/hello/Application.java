@@ -25,9 +25,6 @@ public class Application {
 
 			Customer newcustomer = new Customer();
 			newcustomer.setFirstName("test");
-			newcustomer.setCompany(company);
-
-			repository.save(newcustomer);
 
 			company.addCustomer(newcustomer);
 

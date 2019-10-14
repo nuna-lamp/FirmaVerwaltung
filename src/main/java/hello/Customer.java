@@ -13,14 +13,13 @@ public class Customer implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column (name = "ID")
 	private Long id;
 	@Column (name = "First_Name")
 	private String firstName;
 	@Column (name = "Last_Name")
 	private String lastName;
 
-	@ManyToOne (cascade=CascadeType.ALL, targetEntity=hello.Company.class)
+	@ManyToOne (targetEntity=hello.Company.class)
 	private Company company;
 
 	protected Customer() {

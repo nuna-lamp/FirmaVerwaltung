@@ -36,7 +36,7 @@ public class MainViewTests {
 	@Before
 	public void setup() {
 		this.editor = new CustomerEditor(this.repository);
-		this.mainView = new MainView(this.repository, companyRepository, editor, companies);
+	//	this.mainView = new MainView(this.repository, companyRepository, editor, companies);
 	}
 
 	@Test
