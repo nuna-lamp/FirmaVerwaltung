@@ -28,8 +28,7 @@ public class Application {
 
 			company.addCustomer(newcustomer);
 
-
-			companyRepository.save(company);
+			//companyRepository.save(company);
 
 
 			log.info("Customers found with findAll():");
@@ -41,6 +40,9 @@ public class Application {
 
 		};
 	}
+
+}
+/*
 
 	public CommandLineRunner loadData(CompanyRepository repository) {
 		return (args) -> {
@@ -54,6 +56,8 @@ public class Application {
 
 		};
 	}
-
-
 }
+
+ */
+
+

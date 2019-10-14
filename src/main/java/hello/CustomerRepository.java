@@ -9,6 +9,4 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
 	List<Customer> findByLastNameStartsWithIgnoreCase(String CompanyName);
 
-
-
 }

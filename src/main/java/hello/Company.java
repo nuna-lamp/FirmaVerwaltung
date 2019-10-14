@@ -134,6 +134,4 @@ public class Company implements Serializable {
 				companyName, street, postCode, city, country,vaxID,webSite);
 	}
 
-
-
 }

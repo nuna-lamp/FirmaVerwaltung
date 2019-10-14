@@ -1,5 +1,6 @@
 package hello;
 
+
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyNotifier;
 import com.vaadin.flow.component.button.Button;
@@ -16,16 +17,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 @UIScope
 public class CompanyEditor extends VerticalLayout implements KeyNotifier {
 
-    private final CompanyRepository repository;
+    private final CompanyRepository companyRepository;
     private Company company;
 
     /* Fields to edit properties in Firma entity */
-    TextField companyName = new TextField("Company name");
+    TextField companyName = new TextField("CompanyName");
     TextField street = new TextField("Street");
-    TextField postCode = new TextField("Post code");
+    TextField postCode = new TextField("Postcode");
     TextField city = new TextField("City");
     TextField country = new TextField("Country");
-    TextField vaxID = new TextField("Vax ID");
+    TextField vaxID = new TextField("VaxID");
     TextField webSite = new TextField("Website");
 
     /* Action buttons */
@@ -35,15 +36,20 @@ public class CompanyEditor extends VerticalLayout implements KeyNotifier {
     Button delete = new Button("Delete", VaadinIcon.TRASH.create());
     HorizontalLayout actions = new HorizontalLayout(save, cancel, delete);
 
+    /*MultiselectComboBox<String> multiselectComboBox = new MultiselectComboBox();
+
+multiselectComboBox.setLabel("Select items");
+
+multiselectComboBox.setItems("Item 1", "Item 2", "Item 3", "Item 4");*/
     Binder<Company> binder = new Binder<>(Company.class);
     private ChangeHandler changeHandler;
 
 
     @Autowired
-    public CompanyEditor(CompanyRepository repository) {
-        this.repository = repository;
+    public CompanyEditor(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
 
-        add(companyName,street,postCode,city,country,vaxID,webSite);
+        add(companyName,street,postCode,city,country,vaxID,webSite,actions);
 
         // bind using naming convention
         binder.bindInstanceFields(this);
@@ -59,52 +65,49 @@ public class CompanyEditor extends VerticalLayout implements KeyNotifier {
         // wire action buttons to save, delete and reset
         save.addClickListener(e -> save());
         delete.addClickListener(e -> delete());
-        cancel.addClickListener(e -> edit(company));
+        cancel.addClickListener(e -> editCompany(company));
         setVisible(false);
     }
 
 
     void delete() {
-        repository.delete(company);
+        companyRepository.delete(company);
         changeHandler.onChange();
     }
 
     void save() {
-        repository.save(company);
+        companyRepository.save(company);
         changeHandler.onChange();
     }
 
-    public interface ChangeHandler {
-        void onChange();
-    }
-
-    public final void edit(Company f) {
-        if (f == null) {
+    public final void editCompany(Company c) {
+        if (c == null) {
             setVisible(false);
             return;
         }
-        //final boolean persisted = f.getFirmaName()!= null;
-        final boolean persisted = f.getId()!= 0;
+        final boolean persisted = c.getId() != 0;
         if (persisted) {
             // Find fresh entity for editing
-            //customer = repository.findById(c.getId()).get();
-
-            company = (Company) repository.findByCompanyNameStartsWithIgnoreCase(f.getCompanyName().toString());
+            company = companyRepository.findById(c.getId()).get();
         }
         else {
-            company = f;
+            company = c;
         }
         cancel.setVisible(persisted);
 
-        // Bind Firma properties to similarly named fields
+        // Bind customer properties to similarly named fields
         // Could also use annotation or "manual binding" or programmatically
         // moving values from fields to entities before saving
         binder.setBean(company);
 
         setVisible(true);
 
-        // Focus companyName initially
+        // Focus first name initially
         companyName.focus();
+    }
+
+    public interface ChangeHandler {
+        void onChange();
     }
 
     public void setChangeHandler(ChangeHandler h) {
@@ -112,6 +115,4 @@ public class CompanyEditor extends VerticalLayout implements KeyNotifier {
         // is clicked
         changeHandler = h;
     }
-
-
 }
