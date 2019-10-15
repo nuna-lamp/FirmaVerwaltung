@@ -1,6 +1,7 @@
 package hello;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.*;
 
@@ -29,7 +30,8 @@ public class Company implements Serializable {
 
 	@OneToMany(
 			cascade = CascadeType.ALL,
-			orphanRemoval = true
+			orphanRemoval = true,
+            fetch = FetchType.EAGER
 	)
 	@JoinColumn(name = "company_id")
 	private List<Customer> customers = new ArrayList<>();

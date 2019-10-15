@@ -33,6 +33,8 @@ public class CompanyEditor extends VerticalLayout implements KeyNotifier {
     TextField vaxID = new TextField("VaxID");
     TextField webSite = new TextField("Website");
 
+    private MultiselectComboBox<Customer> comboBoxMultiselect = new MultiselectComboBox();
+
     /* Action buttons */
     // TODO why more code?
     Button save = new Button("Save", VaadinIcon.CHECK.create());
@@ -48,18 +50,8 @@ public class CompanyEditor extends VerticalLayout implements KeyNotifier {
     public CompanyEditor(CompanyRepository companyRepository, CustomerRepository customerRepository) {
         this.companyRepository = companyRepository;
 
-        // Initialize a list with items
 
-      /*  List<Customer> list = new ArrayList<Customer>();
-        Customer customer = new Customer();
-        list.add(new Customer("Manu", "bopp"));
-        list.add(customer);
-        list.add(new Customer("Tobias", "Tobias"));
-        list.add(new Customer("Heiko", "Heiko"));*/
 
-        // Initialize the ComboBoxMultiselect
-        MultiselectComboBox<Customer> comboBoxMultiselect = new MultiselectComboBox();
-        //MultiselectComboBox<String> comboBoxMultiselect = new MultiselectComboBox();
         comboBoxMultiselect.setWidth("200px");
         comboBoxMultiselect.setPlaceholder("you can choose hier");
         comboBoxMultiselect.setLabel("Customers");
@@ -67,20 +59,13 @@ public class CompanyEditor extends VerticalLayout implements KeyNotifier {
 
 
         comboBoxMultiselect.setItems(customerRepository.findAll());
-        //comboBoxMultiselect.setItems("Id", "First Name", "Last Name");
-        //comboBoxMultiselect.setItems(list);
+
         comboBoxMultiselect.setRequired(true); // mark as mandatory
         comboBoxMultiselect.setErrorMessage("This field is required"); // set error message
-       // comboBoxMultiselect.setCompactMode(true); // enable compact mode
-/*
-        Set value = new HashSet();
-        value.add("Item 2");
-        value.add("Item 3");
-        comboBoxMultiselect.setValue(value);
+        comboBoxMultiselect.addSelectionListener(event -> {
+            company.setCustomers(new ArrayList<>(event.getAllSelectedItems()));
+        });
 
-        comboBoxMultiselect.setEnabled(false); // mark as disabled
-*/
-   //      Set<Customer> value = comboBoxMultiselect.getValue();
 
 
         add(companyName, street, postCode, city, country, vaxID, webSite, comboBoxMultiselect, actions);
@@ -95,15 +80,7 @@ public class CompanyEditor extends VerticalLayout implements KeyNotifier {
         save.getElement().getThemeList().add("primary");
         delete.getElement().getThemeList().add("error");
 
-      //comboBoxMultiselect.addValueChangeListener(e -> editCompany(company));
-       /*
-        comboBoxMultiselect.addSelectionListener(e -> {
-            Customer cust = new e.getValue();
-            String item = String.format("%d: %s: %s", id.getId(), firsName.getFirstName(), lastName.getLastName);
 
-            cust.setValue(item);
-        });
-        */
         comboBoxMultiselect.addSelectionListener(e -> {
             e.getAddedSelection(); // get added items
             e.getRemovedSelection();// get removed items
@@ -143,6 +120,8 @@ public class CompanyEditor extends VerticalLayout implements KeyNotifier {
         } else {
             company = c;
         }
+        comboBoxMultiselect.select(c.getCustomers());
+
         cancel.setVisible(persisted);
 
         // Bind customer properties to similarly named fields
