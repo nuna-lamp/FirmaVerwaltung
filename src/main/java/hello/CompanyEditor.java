@@ -12,6 +12,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.gatanaso.MultiselectComboBox;
 
 @SpringComponent
 @UIScope
@@ -49,7 +50,13 @@ multiselectComboBox.setItems("Item 1", "Item 2", "Item 3", "Item 4");*/
     public CompanyEditor(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
 
-        add(companyName,street,postCode,city,country,vaxID,webSite,actions);
+        MultiselectComboBox comboBoxMultiselect = new MultiselectComboBox();
+
+        comboBoxMultiselect.setLabel("Select items");
+
+        comboBoxMultiselect.setItems("Item 1", "Item 2", "Item 3", "Item 4");
+
+        add(companyName,street,postCode,city,country,vaxID,webSite,comboBoxMultiselect, actions);
 
         // bind using naming convention
         binder.bindInstanceFields(this);
