@@ -47,14 +47,14 @@ multiselectComboBox.setItems("Item 1", "Item 2", "Item 3", "Item 4");*/
 
 
     @Autowired
-    public CompanyEditor(CompanyRepository companyRepository) {
+    public CompanyEditor(CompanyRepository companyRepository, CustomerRepository customerRepository) {
         this.companyRepository = companyRepository;
 
-        MultiselectComboBox comboBoxMultiselect = new MultiselectComboBox();
+        MultiselectComboBox<Customer> comboBoxMultiselect = new MultiselectComboBox();
 
-        comboBoxMultiselect.setLabel("Select items");
+        comboBoxMultiselect.setLabel("Customers");
 
-        comboBoxMultiselect.setItems("Item 1", "Item 2", "Item 3", "Item 4");
+        comboBoxMultiselect.setItems(customerRepository.findAll());
 
         add(companyName,street,postCode,city,country,vaxID,webSite,comboBoxMultiselect, actions);
 
