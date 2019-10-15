@@ -57,6 +57,7 @@ public class MainView extends VerticalLayout {
 
 
 		companies.setHeight("300px");
+		//companies.setColumns("id", "companyName", "street","postCode","city","country","vaxID","webSite");
 		companies.setColumns("id", "companyName", "street","postCode","city","country","vaxID","webSite");
 		companies.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
 

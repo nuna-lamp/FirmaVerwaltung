@@ -39,15 +39,9 @@ public class CustomerEditorTests {
 	public void shouldStoreCustomerInRepoWhenEditorSaveClicked() {
 		emptyCustomerWasSetToForm();
 
-		this.editor.companyName.setValue(COMPANY_NAME);
 		this.editor.lastName.setValue(LAST_NAME);
 		this.editor.firstName.setValue(FIRST_NAME);
-		this.editor.street.setValue(STREET);
-		this.editor.postCode.setValue(POST_CODE);
-		this.editor.city.setValue(CITY);
-		this.editor.country.setValue(COUNTRY);
-		this.editor.vaxID.setValue(VAX_ID);
-		this.editor.webSite.setValue(WEBSITE);
+
 
 		this.editor.save();
 

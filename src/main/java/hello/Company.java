@@ -123,9 +123,14 @@ public class Company implements Serializable {
 		this.customers = customers;
 	}
 
-	public void addCustomer(Customer customer){
+	public void addCustomer(Customer customer)
+	{
 		this.getCustomers().add(customer);
 	}
+
+
+
+
 
 
 	@Override
