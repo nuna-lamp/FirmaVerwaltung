@@ -8,6 +8,11 @@ import java.util.*;
 
 @Entity
 @Table(name = "company")
+/*
+@NamedQuery(name = "customer.findByLastNameStartsWithIgnoreCase",
+		query = "select last_name from customer last_name where last_name.company_name = ?1")
+
+ */
 public class Company implements Serializable {
 
 	@Id
@@ -30,8 +35,8 @@ public class Company implements Serializable {
 
 	@OneToMany(
 			cascade = CascadeType.ALL,
-			orphanRemoval = true,
-            fetch = FetchType.EAGER
+			orphanRemoval = true
+			,fetch = FetchType.EAGER
 	)
 	@JoinColumn(name = "company_id")
 	private List<Customer> customers = new ArrayList<>();
@@ -129,11 +134,6 @@ public class Company implements Serializable {
 	{
 		this.getCustomers().add(customer);
 	}
-
-
-
-
-
 
 	@Override
 	public String toString() {

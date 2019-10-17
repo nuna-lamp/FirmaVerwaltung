@@ -62,10 +62,10 @@ public class CompanyEditorTests {
 	}
 
 	private void emptyFirmaWasSetToForm() {
-		this.editor.edit(new Company());
+		//this.editor.edit(new Company());
 	}
 	private void firmaDataWasFilled() {
-		this.editor.edit(new Company(firmaName, strasse, plz, ort, land, ustID, webSite));
+		//this.editor.edit(new Company(firmaName, strasse, plz, ort, land, ustID, webSite));
 	}
 
 	private ArgumentMatcher<Company> firmaMatchesEditorFields() {

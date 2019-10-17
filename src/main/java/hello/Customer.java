@@ -1,25 +1,34 @@
 package hello;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.NamedQuery;
 
 @EnableTransactionManagement
 @Entity
 @Table(name = "customer")
+/*
+@NamedQuery(name = "Customer.findByLastNameStartsWithIgnoreCase",
+		query (value = "select from customer where last_name = ?1")
+ */
 public class Customer implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	@Column (name = "First_Name")
+	@Column(name = "First_Name")
 	private String firstName;
-	@Column (name = "Last_Name")
+	@Column(name = "Last_Name")
 	private String lastName;
 
-	@ManyToOne (targetEntity=hello.Company.class)
+
+	@ManyToOne(targetEntity = hello.Company.class)
 	private Company company;
 
 	protected Customer() {
@@ -42,8 +51,7 @@ public class Customer implements Serializable {
 		this.firstName = firstName;
 	}
 
-	public String getLastName()
-	{
+	public String getLastName() {
 		return lastName;
 	}
 
