@@ -17,6 +17,7 @@ import java.util.List;
 
 @Route
 public class MainView extends VerticalLayout {
+
 	private static SessionFactory factory;
 	private final CustomerRepository repo;
 	private final CompanyRepository companyRepository;
