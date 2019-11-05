@@ -1,158 +1,155 @@
 package hello;
 
+import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 import org.hibernate.SessionFactory;
-import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 @Route
 public class MainView extends VerticalLayout {
+    private static SessionFactory factory;
+    private final CustomerRepository repo;
+    private final CompanyRepository companyRepository;
+    private final CustomerEditor editor;
+    private CompanyEditor companyEditor;
 
-	private static SessionFactory factory;
-	private final CustomerRepository repo;
-	private final CompanyRepository companyRepository;
+    final HorizontalLayout layout;
+    final Grid<Customer> grid;
+    private Button button = new Button("home");
+    //final SplitLayout innenLayout;
+    //final MenuBar menuBar;
+    //final MenuItem project;
+    //final Text selected;
+    /*
+    private TextArea textArea = new TextArea();
 
-	private final CustomerEditor editor;
-	private CompanyEditor companyEditor;
+    */
 
-	final Grid<Customer> grid;
-	final Grid<Company> companies;
+    public MainView(CustomerRepository repo, CompanyRepository companyRepository, CustomerEditor editor, CompanyEditor companyEditor) {
+        this.repo = repo;
+        this.companyRepository = companyRepository;
+        this.editor = editor;
+        this.companyEditor = companyEditor;
 
+        this.layout = new HorizontalLayout();
+        //this.textArea = new TextArea();
+        //this.innenLayout = new SplitLayout();
+        //this.menuBar = new MenuBar();
+        //this.project = new MenuItem();
+        //this.selected = new Text("");
+        //this.textLabel = new Label();
 
-	final TextField filter1;
-	final TextField filter2;
-	final TextField filter3;
+        this.grid = new Grid<>(Customer.class);
 
-	private final Button addNewBtn;
-	private final Button addNewCompany;
+        setDefaultHorizontalComponentAlignment(Alignment.START);
+        setSizeFull();
+        H1 head = new H1("LAMP-Solutions");
+        head.getElement().getThemeList().add("dark");
+        add(head);
 
-	public MainView(CustomerRepository repo, CompanyRepository companyRepository, CustomerEditor editor, CompanyEditor companyEditor) {
-		this.repo = repo;
-		this.companyRepository = companyRepository;
+        // build layout
+        layout.getStyle().set("border", "0px solid #9E9E9E");
+        layout.setWidth("100%");
+        layout.setHeight("30px");
+        layout.setPadding(false);
+        layout.setMargin(true);
+        layout.setSpacing(true);
+        layout.setJustifyContentMode(JustifyContentMode.START);
+        layout.setDefaultVerticalComponentAlignment(Alignment.END);
+/*
+        Image image = new Image("..webApp/frontend/images/lamp-logo-transparent.png", "Logo");
+        image.setWidth("50px");
+         setHorizontalComponentAlignment(Alignment.END, button);
+        add(image);
+*/
+        grid.setHeightByRows(true);
+        grid.addColumn(Customer::getId);
+        grid.addColumn(Customer::getFirstName);
+        grid.addColumn(Customer::getLastName);
+        grid.addColumn(Customer::getCompany);
 
-		this.editor = editor;
-		this.companyEditor = companyEditor;
+/*
+        Stream.of("Customers", "Compannies", "Dashboard", "Help").forEach(menuBar::addItem);
+        Div menu = new Div();
+        menu.add(new RouterLink("Customers", CustomerView.class));
+        menu.add(new RouterLink("Companies", CompanyView.class));
 
-		this.companies = new Grid<>(Company.class);
-		this.grid = new Grid<>(Customer.class);
+        Label title = new Label("Menue");
+        Button custom =  new Button("Customers", event -> getNavagator().navigteTo("Costomers"));
+        Button compa =  new Button("Companies", event -> getNavagator().navigteTo("Companies"));
 
+        CssLayout viewContainer = new CssLayout(title, custom, compa);
 
-		this.filter1 = new TextField();
-		this.filter2 = new TextField();
-		this.filter3 = new TextField();
+         HorizontalLayout mainLayout = new HorizontalLayout(menuBar, (Component) viewContainer);
+         mainLayout.setSizeFull();
+         setContent(mainLayout);
 
+         Navigator navigatou = new Navigator(this.grid);
+         setContent(mainLayout);
+*/
+        MenuBar menuBar = new MenuBar();
+        Div menu = new Div();
 
-		this.addNewBtn = new Button("New customer", VaadinIcon.PLUS.create());
-		this.addNewCompany = new Button("New company", VaadinIcon.PLUS.create());
+        HorizontalLayout header = new HorizontalLayout();
+        header.setAlignItems(FlexComponent.Alignment.CENTER);
+        header.setFlexGrow(1, (HasElement) menuBar);
+        header.setPadding(true);
+        header.setSpacing(true);
+        add(header);
+        initHeadersAndFooters();
 
-		// build layout
-		HorizontalLayout actions1 = new HorizontalLayout(filter1);
-		HorizontalLayout actions2 = new HorizontalLayout(filter2, filter3,addNewBtn, addNewCompany);
+        HorizontalLayout actions0 = new HorizontalLayout(layout);
+        add(new H1("Hello welcome "));
 
+        Paragraph text = new Paragraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
 
-		add(actions1, grid, editor);
-		add(actions2, companies, companyEditor);
+        VerticalLayout content = new VerticalLayout(text);
+        content.setPadding(true);
+        add(content);
 
-		grid.setHeight("300px");
-		grid.setColumns("id", "firstName", "lastName","company");
-		grid.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
+        TextField name = new TextField("Name");
+        Paragraph greeting = new Paragraph("");
 
+        Button button = new Button("Greet", event -> {
+            greeting.setText("Hello " + name.getValue());
+        });
+        add(name, button, greeting);
 
-		companies.setHeight("300px");
-		companies.setColumns("id", "companyName", "street", "postCode", "city", "country", "vaxID", "webSite");
-		companies.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
+       // setViewContent(content);
+        Label abc = new Label("Footer: Email...");
+        HorizontalLayout footer = new HorizontalLayout(abc);
+        footer.setPadding(true);
+        footer.setSpacing(true);
+        add(footer);
 
+    }
 
-		filter1.setPlaceholder("Filter first name or Company name");
-		filter2.setPlaceholder("Filter company name");
-		filter3.setPlaceholder("Filter customer name");
+     private void initHeadersAndFooters() {
+        Tab tab1 = new Tab();
+        tab1.add(new RouterLink("Customers", CustomerView.class));
+        tab1.addDetachListener(e -> editor.editCustomer(new Customer("", "")));
 
+        Tab tab2 = new Tab();
+        tab2.add(new RouterLink("Companies", CompanyView.class));
+        tab2.addDetachListener(e -> companyEditor.editCompany(new Company("", "", "", "", "", "", "")));
 
-		// Hook logic to components
-
-		// Replace listing with filtered content when user changes filter
-		filter1.setValueChangeMode(ValueChangeMode.EAGER);
-		filter1.addValueChangeListener(e -> listCustomers(e.getValue()));
-
-		filter2.setValueChangeMode(ValueChangeMode.EAGER);
-		filter2.addValueChangeListener(e -> listCompanies(e.getValue()));
-
-		filter3.setValueChangeMode(ValueChangeMode.EAGER);
-		filter3.addValueChangeListener(e -> findCustomerName(e.getValue()));
-
-		// Connect selected Customer and Company to editor or hide if none is selected
-		grid.asSingleSelect().addValueChangeListener(e -> {
-			editor.editCustomer(e.getValue());
-		});
-		companies.asSingleSelect().addValueChangeListener(e -> {
-			companyEditor.editCompany(e.getValue());
-		});
-
-		// Instantiate and edit new Customer and Company new button is clicked
-		addNewBtn.addClickListener(e -> editor.editCustomer(new Customer("", "")));
-		addNewCompany.addClickListener(e -> companyEditor.editCompany(new Company("", "", "", "", "", "", "")));
-		// Listen changes made by the editor, refresh data from backend
-
-		editor.setChangeHandler(() -> {
-			editor.setVisible(false);
-			listCustomers(filter1.getValue());
-		});
-
-		companyEditor.setChangeHandler(() -> {
-			companyEditor.setVisible(false);
-			listCompanies(filter2.getValue());
-		});
-
-		// Initialize listing
-		listCustomers(null);
-		listCompanies(null);
-	}
-
-	// tag::listCustomers[]
-	void listCustomers(String filterText) {
-		if (StringUtils.isEmpty(filterText)) {
-			grid.setItems(repo.findAll());
-
-		} else {
-
-			List customers = new ArrayList<Customer>();
-
-			customers.addAll(companyRepository.findCustomerByComapnyName(filterText));
-			customers.addAll(repo.findByFirstNameStartsWithIgnoreCase(filterText));
-
-			grid.setItems(customers);
-			//grid.setItems(repo.findByLastNameStartsWithIgnoreCase(filterText));
-		}
-	}
-
-	void listCompanies(String companyText) {
-		if (StringUtils.isEmpty(companyText)) {
-			companies.setItems(companyRepository.findAll());
-		} else {
-			companies.setItems(companyRepository.findByCompanyNameStartsWithIgnoreCase(companyText));
-		}
-
-		//companies.setItems(companyRepository.findAll());
-	}
-
-	void findCustomerName(String filter) {
-		if (StringUtils.isEmpty(filter)) {
-			grid.setItems(repo.findAll());
-
-		} else {
-			grid.setItems(repo.findByLastNameStartsWithIgnoreCase(filter));
-		}
-	}
+        Tabs tabs = new Tabs(tab1, tab2);
+        add(tabs);
+    }
 }
-// end::listCustomers[]
+
 

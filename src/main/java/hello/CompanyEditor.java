@@ -12,11 +12,9 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.vaadin.gatanaso.MultiselectComboBox;
 
-import java.util.*;
-import java.util.concurrent.Callable;
+import java.util.ArrayList;
 
 @SpringComponent
 @UIScope
@@ -50,8 +48,6 @@ public class CompanyEditor extends VerticalLayout implements KeyNotifier {
     @Autowired
     public CompanyEditor(CompanyRepository companyRepository, CustomerRepository customerRepository) {
         this.companyRepository = companyRepository;
-
-
 
         comboBoxMultiselect.setWidth("200px");
         comboBoxMultiselect.setPlaceholder("you can choose hier");
