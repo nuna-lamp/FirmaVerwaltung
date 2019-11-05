@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Route (value = "Companies")
-public class CompanyView extends VerticalLayout {
+public class CompanyView extends PageView {
 
     private final CompanyRepository companyRepository;
     private CompanyEditor companyEditor;
@@ -37,12 +37,6 @@ public class CompanyView extends VerticalLayout {
         this.filter2 = new TextField();
         this.addNewCompany = new Button("New company", VaadinIcon.PLUS.create());
 
-
-        setDefaultHorizontalComponentAlignment(Alignment.START);
-        setSizeFull();
-        H1 head = new H1("LAMP-Solutions");
-        head.getElement().getThemeList().add("dark");
-        add(head);
         initHeadersAndFooters();
 
         HorizontalLayout actions2 = new HorizontalLayout(filter2, addNewCompany);
@@ -88,16 +82,6 @@ public class CompanyView extends VerticalLayout {
         }
     }
 
-    private void initHeadersAndFooters() {
-        Tab tab1 = new Tab();
-        tab1.add(new RouterLink("Customers", CustomerView.class));
-
-        Tab tab2 = new Tab();
-        tab2.add(new RouterLink("Companies", CompanyView.class));
-
-        Tabs tabs = new Tabs(tab1, tab2);
-        add(tabs);
-    }
 }
 
 

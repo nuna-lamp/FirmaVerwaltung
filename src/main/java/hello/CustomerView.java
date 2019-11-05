@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Route(value = "Customers")
-public class CustomerView extends VerticalLayout {
+public class CustomerView extends PageView {
     private final CustomerRepository repo;
     private final CustomerEditor editor;
 
@@ -36,12 +36,6 @@ public class CustomerView extends VerticalLayout {
         this.filter1 = new TextField();
         this.addNewBtn = new Button("New customer", VaadinIcon.PLUS.create());
 
-      //com.vaadin.flow.component.menubar.MenuBar menubar = new com.vaadin.flow.component.menubar.MenuBar();
-        setDefaultHorizontalComponentAlignment(Alignment.START);
-        setSizeFull();
-        H1 head = new H1("LAMP-Solutions");
-        head.getElement().getThemeList().add("dark");
-        add(head);
         initHeadersAndFooters();
 
         HorizontalLayout actions1 = new HorizontalLayout(filter1, addNewBtn);
@@ -89,16 +83,6 @@ public class CustomerView extends VerticalLayout {
         }
     }
 
-    private void initHeadersAndFooters() {
-        Tab tab1 = new Tab();
-        tab1.add(new RouterLink("Customers", CustomerView.class));
-
-        Tab tab2 = new Tab();
-        tab2.add(new RouterLink("Companies", CompanyView.class));
-
-        Tabs tabs = new Tabs(tab1, tab2);
-        add(tabs);
-    }
 
 }
 
