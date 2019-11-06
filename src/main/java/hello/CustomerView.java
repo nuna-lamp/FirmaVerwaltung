@@ -2,16 +2,11 @@ package hello;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLink;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -36,7 +31,7 @@ public class CustomerView extends PageView {
         this.filter1 = new TextField();
         this.addNewBtn = new Button("New customer", VaadinIcon.PLUS.create());
 
-        initHeadersAndFooters();
+        initHeaders();
 
         HorizontalLayout actions1 = new HorizontalLayout(filter1, addNewBtn);
         add(actions1, grid, editor);
@@ -68,6 +63,7 @@ public class CustomerView extends PageView {
 
         // Initialize listing
         listCustomers(null);
+        initFooters();
     }
 
     // tag::listCustomers[]
@@ -82,7 +78,5 @@ public class CustomerView extends PageView {
             //grid.setItems(repo.findByLastNameStartsWithIgnoreCase(filterText));
         }
     }
-
-
 }
 

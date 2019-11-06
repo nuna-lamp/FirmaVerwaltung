@@ -2,16 +2,11 @@ package hello;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLink;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -37,7 +32,7 @@ public class CompanyView extends PageView {
         this.filter2 = new TextField();
         this.addNewCompany = new Button("New company", VaadinIcon.PLUS.create());
 
-        initHeadersAndFooters();
+        initHeaders();
 
         HorizontalLayout actions2 = new HorizontalLayout(filter2, addNewCompany);
         add(actions2, grid, companyEditor);
@@ -70,6 +65,7 @@ public class CompanyView extends PageView {
 
         // Initialize listing
         listCompanies(null);
+        initFooters();
     }
 
     void listCompanies(String companyText) {
